@@ -237,8 +237,8 @@ Olha alí no final... Clica lá!!
 
 Funciona assim:
 
-- Em **Sample Step** você seleciona o que quer fazer.
-- Os campos mudam de acordo com o escolhido. 
+- Em **Sample Step** você seleciona o que pretende fazer.
+- Os campos mudam de acordo com a opção escolhida. 
 - Preencha de acordo com o desejado e clique em **Generate Groovy**.
 
 
