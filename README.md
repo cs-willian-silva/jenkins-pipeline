@@ -36,12 +36,15 @@ Neste post não farei instalação/configuração do Jenkins. Utilizaremos o Doc
 
 Baixando o container:
 
-
-	$ docker pull jenkinsci/jenkins
+```sh
+$ docker pull jenkinsci/jenkins
+```
 
 Iniciando o Jenkins com diretório de persistência e redirecionamento de portas:
 
-	$ docker run -d --name jenkins -v /opt/jenkins:/var/jenkins_home -p 8080:8080 -p 50000:50000 jenkinsci/jenkins
+```sh
+$ docker run -d --name jenkins -v /opt/jenkins:/var/jenkins_home -p 8080:8080 -p 50000:50000 jenkinsci/jenkins
+```
 	
 Com o Jenkins em execução, vamos criar nosso job:
 
@@ -101,19 +104,23 @@ Para isso vamos conectar um dispositivo Android no Jenkins Slave, ou iniciar um 
 
 Vamos ver o dispositivo conectado ao *slave*:
 
-	$ adb devices
-	List of devices attached
-	192.168.56.101:5555	device
+```sh
+$ adb devices
+List of devices attached
+192.168.56.101:5555	device
+```
 
 O nome do device é "192.168.56.101:5555". Vamos utilizá-lo à seguir.
 
 No Jenkinsfile adicionamos o bloco:
 
-	stage 'Build & Archive Apk'
-	  node('slave') {
-	    sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./build.sh'
-	    step([$class: 'ArtifactArchiver', artifacts: 'meu_aplicativo/build/outputs/apk/meu_aplicativo.apk'])
-	}
+```groovy
+stage 'Build & Archive Apk'
+ node('slave') {
+  sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./build.sh'
+  step([$class: 'ArtifactArchiver', artifacts: 'meu_aplicativo/build/outputs/apk/meu_aplicativo.apk'])
+ }
+```
 	
 - Para este stage demos o nome de "Build & Archive Apk".
 - Mantivemos a execução no node "*slave*".
@@ -122,17 +129,19 @@ No Jenkinsfile adicionamos o bloco:
 
 Nosso Jenkinsfile ficou assim:
 
-	stage 'Checkout'
-	  node('slave') {
-	    deleteDir()
-	    checkout scm
-	}
+```groovy
+stage 'Checkout'
+ node('slave') {
+  deleteDir()
+  checkout scm
+ }
 
-	stage 'Build & Archive Apk'
-	  node('slave') {
-	    sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./build.sh'
-	    step([$class: 'ArtifactArchiver', artifacts: 'meu_aplicativo/build/outputs/apk/	meu_aplicativo.apk'])
-	}
+stage 'Build & Archive Apk'
+ node('slave') {
+  sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./build.sh'
+  step([$class: 'ArtifactArchiver', artifacts: 'meu_aplicativo/build/outputs/apk/meu_aplicativo.apk'])
+ }
+```
 	
 Vamos construir o projeto!
 
@@ -152,12 +161,14 @@ Vamos agora executar os testes e publicar os relatórios.
 
 No Jenkinsfile, vamos adicionar:
 
-	stage 'Run Tests'
-	  node('slave') {
-	    sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./runtests.sh'
-	    publishHTML(target: [reportDir: 'meu_aplicativo_testes/build/reports/androidTests/connected/', reportFiles: 'index.html', reportName: 'Testes Instrumentados'])
-	    step([$class: 'JUnitResultArchiver', testResults: 'meu_aplicativo_testes/build/outputs/androidTest-results/connected/*.xml'])
-	}
+```groovy
+stage 'Run Tests'
+ node('slave') {
+  sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./runtests.sh'
+  publishHTML(target: [reportDir: 'meu_aplicativo_testes/build/reports/androidTests/connected/', reportFiles: 'index.html', reportName: 'Testes Instrumentados'])
+  step([$class: 'JUnitResultArchiver', testResults: 'meu_aplicativo_testes/build/outputs/androidTest-results/connected/*.xml'])
+ }
+```
 	
 - Para este stage demos o nome de "Run Tests".
 - Novamente estamos utilizando "**sh**" para exportar a variável com o nome do dispositivo Android, e na sequência executamos um script que fará os testes no aplicativo.
@@ -166,24 +177,26 @@ No Jenkinsfile, vamos adicionar:
 
 O Jenkinsfile ficou assim:
 
-	stage 'Checkout'
-	  node('slave') {
-	    deleteDir()
-	    checkout scm
-	}
+```groovy
+stage 'Checkout'
+ node('slave') {
+  deleteDir()
+  checkout scm
+}
 
-	stage 'Build & Archive Apk'
-	  node('slave') {
-	    sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./build.sh'
-	    step([$class: 'ArtifactArchiver', artifacts: 'meu_aplicativo/	build/outputs/apk/meu_aplicativo.apk'])
-	}
+stage 'Build & Archive Apk'
+ node('slave') {
+  sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./build.sh'
+  step([$class: 'ArtifactArchiver', artifacts: 'meu_aplicativo/build/outputs/apk/meu_aplicativo.apk'])
+ }
 
-	stage 'Run Tests'
-	  node('slave') {
-	    sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./runtests.sh'
-	    publishHTML(target: [reportDir: 'meu_aplicativo_testes/build/reports/androidTests/connected/', reportFiles: 'index.html', reportName: 'Testes Instrumentados'])
-	    step([$class: 'JUnitResultArchiver', testResults: 'meu_aplicativo_testes/build/outputs/androidTest-results/connected/*.xml'])
-	}
+stage 'Run Tests'
+ node('slave') {
+  sh 'export ANDROID_SERIAL=192.168.56.101:5555 ; ./runtests.sh'
+  publishHTML(target: [reportDir: 'meu_aplicativo_testes/build/reports/androidTests/connected/', reportFiles: 'index.html', reportName: 'Testes Instrumentados'])
+  step([$class: 'JUnitResultArchiver', testResults: 'meu_aplicativo_testes/build/outputs/androidTest-results/connected/*.xml'])
+}
+```
 	
 Vamos construir!!!
 
@@ -250,8 +263,9 @@ No exemplo foi utilizado o step do plugin **HTML Publisher plugin**, onde foi in
 
 Agora é só copiar o código gerado e utilizar dentro dos stages no Jenkinsfile de acordo com sua necessidade.
 
-
-	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'caminho/do/relatorio/', reportFiles: 'index.html', reportName: 'Meu Relatorio'])
+```groovy
+publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'caminho/do/relatorio/', reportFiles: 'index.html', reportName: 'Meu Relatorio'])
+```
 	
 
 * Obs.: Quanto mais plugins instalados no Jenkins, mais opções para gerar o código em Groovy.
