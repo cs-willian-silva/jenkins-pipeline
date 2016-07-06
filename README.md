@@ -1,6 +1,6 @@
 # Pipeline como código no Jenkins
 
-Olá pessoal! No meu primeiro post no blog da Concrete, vamos falar sobre um modo diferente para criar Pipelines no Jenkins, **como código**!
+Olá pessoal! No meu primeiro post no Blog da Concrete, vamos falar sobre um modo diferente para criar Pipelines no Jenkins, **como código**!
 
 Geralmente temos um certo trabalho com configuração quando precisamos criar uma estrutura de pipeline, pois envolve criação de múltiplos jobs, configuração do SCM, agendamento para execução, log rotation, arquivamento de artefatos, publicação de relatórios, etc.
 
