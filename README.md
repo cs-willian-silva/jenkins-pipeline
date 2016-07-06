@@ -74,12 +74,13 @@ Vamos criar este projeto utilizando o Jenkinsfile contido no repositório. Vamos
 
 Começaremos com o código abaixo:
 
-	stage 'Checkout'
-  		node('slave') {
-	  		deleteDir()
-	  		checkout scm
-	}
-
+```groovy
+stage 'Checkout'
+ node('slave') {
+  deleteDir()
+  checkout scm
+ }
+```
 
 - Este trecho de código criou o "**stage**" chamado "*Checkout*" (O nome do stage fica à seu critério).
 - Em "**node**" foi definido que o job será executado no nó chamado "*slave*" (Caso não informe o nó, conhecido como "*slave*", o job será executado no Jenkins master).
