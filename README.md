@@ -216,6 +216,9 @@ Mas e se algum step quebrar?
 
 Como visto, o step *Build & Archive Apk* quebrou, e o stage *Run Tests* não foi executado.
 
+Após correções no código, executamos novamente.
+
+
 ![Jenkins 14](imagens/14.png)
 
 Os stages voltam à executar após correção do build, e mantém o histórico dos builds que quebraram.
@@ -227,17 +230,19 @@ Os stages voltam à executar após correção do build, e mantém o histórico d
 
 Ao criar um job de Pipeline no Jenkins, aparece uma opção chamada **Pipeline Syntax**, que ajuda muito quem está começando à trabalhar com Pipeline feito com código.
 
+Olha alí no final... Clica lá!!
+
 ![Jenkins 15](imagens/15.png)
 
-Viu? Alí no final? Então clica lá!!
-
-![Jenkins 16](imagens/16.png)
 
 Funciona assim:
 
 - Em **Sample Step** você seleciona o que quer fazer.
 - Os campos mudam de acordo com o escolhido. 
 - Preencha de acordo com o desejado e clique em **Generate Groovy**.
+
+
+![Jenkins 16](imagens/16.png)
 
 
 No exemplo foi utilizado o step do plugin **HTML Publisher plugin**, onde foi informado o caminho dos arquivos HTML, a página inicial e o nome que o relatório terá quando for publicado. 
@@ -249,7 +254,6 @@ Agora é só copiar o código gerado e utilizar dentro dos stages no Jenkinsfile
 	
 
 * Obs.: Quanto mais plugins instalados no Jenkins, mais opções para gerar o código em Groovy.
-
 
 
 Bom pessoal, por enquanto é isso. Espero que tenham gostado!
