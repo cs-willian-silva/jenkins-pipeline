@@ -88,7 +88,7 @@ stage 'Checkout'
 - Este trecho de código criou o "**stage**" chamado "*Checkout*" (O nome do stage fica à seu critério).
 - Em "**node**" foi definido que o job será executado no nó chamado "*slave*" (Caso não informe o nó, conhecido como "*slave*", o job será executado no Jenkins master).
 - Foi adicionado "**deleteDir()**" para excluir o diretório clonado à cada início de build. 
-- A opção "**checkout scm**" é para utilizar o repositório clonado.
+- A opção "**checkout scm**" indica que o Jenkinsfile foi criado com suporte à multibranch.
 
 Feito isso, ao construir nosso projeto, temos a execução:
 
@@ -270,6 +270,8 @@ publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 
 
 * Obs.: Quanto mais plugins instalados no Jenkins, mais opções para gerar o código em Groovy.
 
+
+**A documentação para o Pipeline do Jenkins pode ser acessada [aqui](https://jenkins.io/doc/pipeline/).** 
 
 Bom pessoal, por enquanto é isso. Espero que tenham gostado!
 
