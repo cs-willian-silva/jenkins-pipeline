@@ -20,9 +20,9 @@ Se não domina, não se preocupe, pois no Jenkins existe uma opção chamada **P
 Como falamos no início, nosso job será criado apenas com código, e com Pipeline temos duas maneiras de fazer.
 
 1. Escrevendo o código diretamente no job.
-2. Criando o "Jenkinsfile" na raíz do repositório, com o código.
+2. Criando o "Jenkinsfile" na raiz do repositório, com o código.
 
-Na minha opinão, a segunda forma é a mais legal, pois com o Jenkinsfile na raíz do repositório teremos todo o histórico de alterações no Git, e o desenvolvedor não precisará abrir o Jenkins para alterar qualquer vírgula no job.
+Na minha opinão, a segunda forma é a mais legal, pois com o Jenkinsfile na raiz do repositório teremos todo o histórico de alterações no Git, e o desenvolvedor não precisará abrir o Jenkins para alterar qualquer vírgula no job.
 
 
 ### Sendo assim, mãos à obra!!!
@@ -34,13 +34,13 @@ Neste post não farei instalação/configuração do Jenkins. Utilizaremos o Doc
 
 #### Iniciando o Jenkins e criando o Job
 
-Baixando o container:
+Para baixar o container:
 
 ```sh
 $ docker pull jenkinsci/jenkins
 ```
 
-Iniciando o Jenkins com diretório de persistência e redirecionamento de portas:
+Para iniciar o Jenkins com diretório de persistência e redirecionamento de portas:
 
 ```sh
 $ docker run -d --name jenkins -v /opt/jenkins:/var/jenkins_home -p 8080:8080 -p 50000:50000 jenkinsci/jenkins
@@ -57,11 +57,11 @@ Vamos dar um nome ao job, informar que ele será um "Pipeline" e clicar em OK pa
 Configuração do job:
 
 1. Navegar até o campo **Pipeline**.
-2. Em **Definition** selecionar "*Pipeline script from SCM*" (Essa opção utiliza o Jenkinsfile contido no repositório).
+2. Em **Definition**, selecionar "*Pipeline script from SCM*" (Essa opção utiliza o Jenkinsfile contido no repositório).
 3. Em **SCM** selecionar "*Git*".
 4. Em **Repositories** vamos informar a URL do repositório em "*Repository URL*" e informar as credenciais em "*Credentials*".
 5. Em **Branches to build** vamos informar a branch desejada em "*Branch Specifier*".
-6. Em **Script Path** vamos informar o nome do nosso "*Jenkinsfile*", que neste caso, será Jenkinsfile mesmo.
+6. Em **Script Path** vamos informar o nome do nosso "*Jenkinsfile*" que, neste caso, será Jenkinsfile mesmo.
 7. Salve o job!
 
 ![Jenkins 03](imagens/03.png)
@@ -73,9 +73,7 @@ Pronto!!!
 
 #### Iniciando o Jenkinsfile
 
-Vamos criar este projeto utilizando o Jenkinsfile contido no repositório. Vamos inicía-lo!
-
-Começaremos com o código abaixo:
+Vamos criar este projeto utilizando o Jenkinsfile contido no repositório. Para iniciá-lo, começaremos com o código abaixo:
 
 ```groovy
 stage 'Checkout'
@@ -85,10 +83,10 @@ stage 'Checkout'
  }
 ```
 
-- Este trecho de código criou o "**stage**" chamado "*Checkout*" (O nome do stage fica à seu critério).
+- Este trecho de código criou o "**stage**" chamado "*Checkout*" (O nome do stage fica a seu critério).
 - Em "**node**" foi definido que o job será executado no nó chamado "*slave*" (Caso não informe o nó, conhecido como "*slave*", o job será executado no Jenkins master).
-- Foi adicionado "**deleteDir()**" para excluir o diretório clonado à cada início de build. 
-- A opção "**checkout scm**" indica que o Jenkinsfile foi criado com suporte à multibranch.
+- Adicionamos "**deleteDir()**" para excluir o diretório clonado a cada início de build. 
+- A opção "**checkout scm**" indica que o Jenkinsfile foi criado com suporte a multibranch.
 
 Feito isso, ao construir nosso projeto, temos a execução:
 
@@ -98,9 +96,9 @@ E o fim:
 
 ![Jenkins 06](imagens/06.png)
 
-Legal! Já conseguimos clonar nosso repositório e iniciar o Pipeline. Agora vamos fazer um build do aplicativo e arquivar o artefato, que neste caso será o aplicativo gerado.
+Legal! Já conseguimos clonar nosso repositório e iniciar o Pipeline. Agora, vamos fazer um build do aplicativo e arquivar o artefato, que neste caso será o aplicativo gerado.
 
-Para isso vamos conectar um dispositivo Android no Jenkins Slave, ou iniciar um emulador. Para nosso projeto, utilizarei o Genymotion para emular um dispositivo com Android.
+Para isso vamos conectar um dispositivo Android no Jenkins Slave ou iniciar um emulador. Para nosso projeto, utilizarei o Genymotion para emular um dispositivo com Android.
 
 Vamos ver o dispositivo conectado ao *slave*:
 
@@ -110,7 +108,7 @@ List of devices attached
 192.168.56.101:5555	device
 ```
 
-O nome do device é "192.168.56.101:5555". Vamos utilizá-lo à seguir.
+O nome do device é "192.168.56.101:5555". Vamos utilizá-lo a seguir.
 
 No Jenkinsfile adicionamos o bloco:
 
@@ -124,7 +122,7 @@ stage 'Build & Archive Apk'
 	
 - Para este stage demos o nome de "Build & Archive Apk".
 - Mantivemos a execução no node "*slave*".
-- Acrescentamos "**sh**", para utilizar Shell Script, onde exportamos a variável "ANDROID_SERIAL" com o nome do nosso dispositivo e na sequência chamamos um script que fará o build do aplicativo.
+- Acrescentamos "**sh**" para utilizar Shell Script, no qual exportamos a variável "ANDROID_SERIAL" com o nome do nosso dispositivo e na sequência chamamos um script que fará o build do aplicativo.
 - Criamos um "**step**" para arquivar o aplicativo gerado utilizando "**ArtifactArchiver**", e passamos o caminho do aplicativo.
 
 Nosso Jenkinsfile ficou assim:
@@ -151,7 +149,7 @@ Como podemos ver, ao finalizar o primeiro stage, foi criado automaticamente o st
 
 ![Jenkins 08](imagens/08.png)
 
-No fim, temos mais um stage finalizado, e em "**Last Successful Artifacts**" temos o aplicativo arquivado, "*meu_aplicativo.apk*".
+No fim, temos mais um stage finalizado e em "**Last Successful Artifacts**" temos o aplicativo arquivado, "*meu_aplicativo.apk*".
 
 
 
@@ -207,11 +205,11 @@ Podemos ver que o stage "*Run Tests*" foi criado automaticamente.
 
 ![Jenkins 10](imagens/10.png)
 
-E no fim da construção, podemos ver que o relatório, chamado "*Testes Instrumentados*" foi publicado com sucesso!!! 
+E no fim da construção podemos ver que o relatório, chamado "*Testes Instrumentados*", foi publicado com sucesso!!! 
 
 Mas opa, está faltando algo... O gráfico de "*Tendência de resultados de teste*". 
 
-Não temos o gráfico porque precisamos arquivar pelo menos 2 jobs, para ter o ponto inicial e ponto final. 
+Não temos o gráfico porque precisamos arquivar pelo menos 2 jobs para ter o ponto inicial e ponto final. 
 
 Sendo assim, vamos executar novamente!
 
@@ -221,7 +219,7 @@ O Pipeline está sendo construído mais uma vez...
 
 ![Jenkins 12](imagens/12.png)
 
-E no fim temos tudo que tínhamos antes, mais o gráfico de "*Tendência de resultados de teste*".
+E no fim temos tudo que tínhamos antes mais o gráfico de "*Tendência de resultados de teste*".
 
 
 Mas e se algum step quebrar? 
@@ -235,16 +233,16 @@ Após correções no código, executamos novamente.
 
 ![Jenkins 14](imagens/14.png)
 
-Os stages voltam à executar após correção do build, e mantém o histórico dos builds que quebraram.
+Os stages voltam a executar após correção do build, e mantêm o histórico dos builds que quebraram.
 
 * Obs.: É possível tratar a quebra dos stages com script, caso queira por exemplo arquivar artefatos ou passar para o stage seguinte mesmo com a quebra do anterior. 
 
 
 #### Bônus
 
-Ao criar um job de Pipeline no Jenkins, aparece uma opção chamada **Pipeline Syntax**, que ajuda muito quem está começando à trabalhar com Pipeline feito com código.
+Ao criar um job de Pipeline no Jenkins, aparece uma opção chamada **Pipeline Syntax**, que ajuda muito quem está começando a trabalhar com Pipeline feito com código.
 
-Olha alí no final... Clica lá!!
+Olha ali no final... Clica lá!
 
 ![Jenkins 15](imagens/15.png)
 
@@ -259,7 +257,7 @@ Funciona assim:
 ![Jenkins 16](imagens/16.png)
 
 
-No exemplo foi utilizado o step do plugin **HTML Publisher plugin**, onde foi informado o caminho dos arquivos HTML, a página inicial e o nome que o relatório terá quando for publicado. 
+No exemplo foi utilizado o step do plugin **HTML Publisher plugin**, no qual foi informado o caminho dos arquivos HTML, a página inicial e o nome que o relatório terá quando for publicado. 
 
 Agora é só copiar o código gerado e utilizar dentro dos stages no Jenkinsfile de acordo com sua necessidade.
 
@@ -273,6 +271,4 @@ publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, 
 
 **A documentação para o Pipeline do Jenkins pode ser acessada [aqui](https://jenkins.io/doc/pipeline/).** 
 
-Bom pessoal, por enquanto é isso. Espero que tenham gostado!
-
-Um abraço! 
+Bom pessoal, por enquanto é isso. Espero que tenham gostado! Se tiver alguma dúvida ou contribuição, use os campos abaixo. Um abraço e até a próxima! 
